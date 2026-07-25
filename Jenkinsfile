@@ -17,6 +17,7 @@ pipeline {
             steps {
                 script {
                     // Builds the application image locally
+                    sudo apt install docker
                     sh "docker build -t ${IMAGE_NAME} ."
                 }
             }
