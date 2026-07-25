@@ -17,23 +17,19 @@ pipeline {
                     def dockerExists = sh(script: 'command -v docker', returnStatus: true) == 0
                     
                     if (!dockerExists) {
-                        echo "Docker CLI not found. Installing via apt-get..."
+                        echo "Docker CLI not found. Installing via built-in system repository..."
                         sh '''
                             apt-get update && \
-                            apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release && \
-                            mkdir -p /etc/apt/keyrings && \
-                            curl -fsSL https://docker.com | gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg && \
-                            echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://docker.com $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
-                            apt-get update && \
-                            apt-get install -y docker-ce-cli
+                            apt-get install -y docker.io
                         '''
-                        echo "Docker CLI successfully installed via official repositories."
-                } else {
-                    echo "Docker CLI is already available on the system."
+                        echo "Docker CLI successfully installed from native repositories."
+                    } else {
+                        echo "Docker CLI is already available on the system."
+                    }
                 }
             }
         }
-    }
+
 
         stage('Checkout') {
             steps {
