@@ -50,7 +50,7 @@ pipeline {
                     sh '''
                     if [ ! -f terraform ]; then
                         # Use curl to download the actual Linux binary zip
-                        curl -fsSL https://releases.hashicorp.com -o terraform.zip
+                        curl -fsSL https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_linux_amd64.zip -o terraform.zip
                         unzip -o terraform.zip
                         chmod +x terraform
                         rm -f terraform.zip
