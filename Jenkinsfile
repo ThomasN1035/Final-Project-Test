@@ -2,7 +2,12 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "my-local-app:latest"
+        // Adds the workspace bin folder to PATH so the downloaded docker binary is accessible
+        PATH = "${WORKSPACE}/bin:${env.PATH}"
+    }
+
+    options {
+        timeout(time: 1, unit: 'HOURS')
     }
 
     stages {
@@ -33,36 +38,20 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                // Pulls code from your GitHub repository
                 checkout scm
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    // Builds the application image locally
-                    sh "docker build -t ${IMAGE_NAME} ."
-                }
+                sh 'docker build -t local-app:latest .'
             }
         }
 
-        stage('Terraform Init & Apply') {
+        stage('Terraform Deploy') {
             steps {
-                script {
-                    // Download Terraform binary inside the build environment if not present
-                    sh '''
-                    if [ ! -f terraform ]; then
-                        wget https://hashicorp.com
-                        unzip terraform_1.5.7_linux_amd64.zip
-                        rm terraform_1.5.7_linux_amd64.zip
-                     Block
-                    fi
-                    '''
-                    // Execute deployment
-                    sh './terraform init'
-                    sh './terraform apply -auto-approve'
-                }
+                sh 'terraform init'
+                sh 'terraform apply -auto-approve'
             }
         }
     }
