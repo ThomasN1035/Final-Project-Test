@@ -38,7 +38,8 @@ pipeline {
                     if [ -z "$API_VERSION" ]; then
                         echo "Error: Could not retrieve Docker server API version."
                         exit 1
-                    
+
+                    fi
                     
                     echo "Detected Docker Server API Version: $API_VERSION"
                     
