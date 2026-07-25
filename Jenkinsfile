@@ -50,9 +50,10 @@ pipeline {
                     sh '''
                     if [ ! -f terraform ]; then
                         # Use curl to download the actual Linux binary zip
-                        curl -LO https://hashicorp.com
-                        unzip terraform_1.5.7_linux_amd64.zip
-                        rm terraform_1.5.7_linux_amd64.zip
+                        curl -fsSL https://hashicorp.com -o terraform.zip
+                        unzip -o terraform.zip
+                        chmod +x terraform
+                        rm -f terraform.zip
                     fi
                     ./terraform init
                     ./terraform apply -auto-approve
