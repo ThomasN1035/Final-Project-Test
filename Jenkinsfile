@@ -64,7 +64,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t local-app:latest .'
+                sh 'docker build -t my-local-app:latest .'
             }
         }
 
