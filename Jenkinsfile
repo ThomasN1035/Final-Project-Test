@@ -49,11 +49,13 @@ pipeline {
                     // Download Terraform binary inside the build environment if not present
                     sh '''
                     if [ ! -f terraform ]; then
-                        wget https://hashicorp.com
+                        # Use curl to download the actual Linux binary zip
+                        curl -LO https://hashicorp.com
                         unzip terraform_1.5.7_linux_amd64.zip
                         rm terraform_1.5.7_linux_amd64.zip
-                     Block
                     fi
+                    ./terraform init
+                    ./terraform apply -auto-approve
                     '''
                 }
                 sh 'terraform init'
