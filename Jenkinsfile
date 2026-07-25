@@ -45,6 +45,17 @@ pipeline {
 
         stage('Terraform Deploy') {
             steps {
+                script {
+                    // Download Terraform binary inside the build environment if not present
+                    sh '''
+                    if [ ! -f terraform ]; then
+                        wget https://hashicorp.com
+                        unzip terraform_1.5.7_linux_amd64.zip
+                        rm terraform_1.5.7_linux_amd64.zip
+                     Block
+                    fi
+                    '''
+                }
                 sh 'terraform init'
                 sh 'terraform apply -auto-approve'
             }
