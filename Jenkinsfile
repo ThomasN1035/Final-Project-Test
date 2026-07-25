@@ -29,7 +29,31 @@ pipeline {
                 }
             }
         }
-
+        stage('Check Docker Daemon Version') {
+            steps {
+                sh '''
+                    # Extract server API version using docker version format
+                    API_VERSION=$(docker version --format '{{.Server.APIVersion}}')
+                    
+                    if [ -z "$API_VERSION" ]; then
+                        echo "Error: Could not retrieve Docker server API version."
+                        exit 1
+                    }
+                    
+                    echo "Detected Docker Server API Version: $API_VERSION"
+                    
+                    # Compare version numbers using awk
+                    HAS_MIN_VERSION=$(echo "$API_VERSION 1.44" | awk '{if ($1 >= $2) print "yes"; else print "no"}')
+                    
+                    if [ "$HAS_MIN_VERSION" = "no" ]; then
+                        echo "Error: Docker daemon API version $API_VERSION is below the required 1.44 minimum."
+                        exit 1
+                    else
+                        echo "Docker daemon version check passed."
+                    fi
+                '''
+            }
+        }
 
         stage('Checkout') {
             steps {
