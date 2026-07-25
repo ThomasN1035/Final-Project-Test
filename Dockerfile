@@ -1,3 +1,4 @@
+sudo apt install docker
 FROM nginx:alpine
 COPY app/ /usr/share/nginx/html/
 EXPOSE 80
