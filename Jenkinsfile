@@ -25,7 +25,8 @@ pipeline {
                         echo "Docker CLI successfully installed from native repositories."
                     } else {
                         echo "Docker CLI is already available on the system."
-                        sh apt-get update
+                        sh apt-get update && \ 
+                        sh apt-get install -y docker.io
                     }
                 }
             }
